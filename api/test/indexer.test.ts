@@ -178,3 +178,119 @@ test('head reset, identity mismatch and broken parent continuity are distinguish
     }
   }
 });
+
+test('invalid creation facts and unknown projector event fail explicitly', async () => {
+  const { project } = await import('../src/indexer/projector.js');
+  const repo = new Repository(':memory:', identity);
+  try {
+    for (const payload of [
+      { ...created().payload, expiresAt: 1 },
+      { ...created().payload, beneficiary: created().payload.sender },
+      { ...created().payload, sender: '0x' + '00'.repeat(20) },
+    ])
+      expect(() => project(repo.db, { ...created(), payload })).toThrow('Invalid creation');
+    expect(() => project(repo.db, resolved('Unknown'))).toThrow('Unknown event');
+  } finally {
+    repo.close();
+  }
+});
+
+test('concurrent block triggers coalesce behind one active retrieval', async () => {
+  const repo = new Repository(':memory:', identity),
+    chain = new FakeChain();
+  let active = 0,
+    max = 0,
+    release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const original = chain.logs.bind(chain);
+  chain.logs = async (from, to) => {
+    active++;
+    max = Math.max(max, active);
+    await gate;
+    const logs = await original(from, to);
+    active--;
+    return logs;
+  };
+  const worker = new Worker(repo, chain);
+  try {
+    const first = worker.request();
+    await Promise.resolve();
+    const second = worker.request();
+    const third = worker.request();
+    release();
+    await Promise.all([first, second, third]);
+    expect(max).toBe(1);
+    expect(repo.diagnostics().journalEventCount).toBe(2);
+    chain.height = 4;
+    chain.header = async (n) => ({ ...header(n), number: n === 4 ? 5 : n });
+    await worker.request();
+    expect(repo.checkpoint()?.number).toBe(3);
+    expect(worker.integrityError).toBeNull();
+  } finally {
+    await worker.stop();
+    repo.close();
+  }
+});
+
+test('committed boundary changing after range fetch latches integrity before any write', async () => {
+  const repo = new Repository(':memory:', identity),
+    chain = new FakeChain();
+  repo.commit([header(1)], [created()]);
+  const original = chain.header.bind(chain);
+  let reads = 0;
+  chain.header = async (n) =>
+    n === 1 && ++reads > 1 ? { ...header(1), hash: h(999) } : original(n);
+  const worker = new Worker(repo, chain);
+  try {
+    await worker.request();
+    expect(worker.integrityError).not.toBeNull();
+    expect(repo.checkpoint()?.number).toBe(1);
+    expect(repo.detail('1')?.recordedState).toBe('Pending');
+  } finally {
+    await worker.stop();
+    repo.close();
+  }
+});
+
+test('reset below deployment is detected before unavailable deployment header lookup', async () => {
+  const repo = new Repository(':memory:', identity),
+    chain = new FakeChain(),
+    worker = new Worker(repo, chain);
+  try {
+    await worker.request();
+    chain.height = 0;
+    chain.identity = async () => {
+      throw Error('deployment block missing');
+    };
+    await worker.request();
+    expect(worker.integrityError).not.toBeNull();
+    expect(worker.state).toBe('failed');
+  } finally {
+    await worker.stop();
+    repo.close();
+  }
+});
+
+test('long catch-up records actual successful header RPC contact independently of head age', async () => {
+  const { health } = await import('../src/health.js');
+  const repo = new Repository(':memory:', identity),
+    chain = new FakeChain();
+  chain.height = 20;
+  let now = 100;
+  const original = chain.header.bind(chain);
+  chain.header = async (n) => {
+    now += 2;
+    return original(n);
+  };
+  const worker = new Worker(repo, chain, () => now);
+  try {
+    await worker.start();
+    expect(now).toBeGreaterThan(130);
+    expect(health(repo, worker, { rpcStale: 30, workerStale: 30 }, now).status).toBe('healthy');
+  } finally {
+    await worker.stop();
+    repo.close();
+  }
+});

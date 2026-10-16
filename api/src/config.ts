@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { keccak256, toUtf8Bytes, JsonRpcProvider, Contract } from 'ethers';
+import { keccak256, toUtf8Bytes, JsonRpcProvider, FetchRequest, Contract } from 'ethers';
 import { artifact } from './chain/reader.js';
 import { address, hash, safeInteger } from './validation.js';
 import type { Identity } from './types.js';
@@ -99,7 +99,9 @@ export function loadManifest(path: string, network: string) {
   return m;
 }
 export function provider(url: string) {
-  return new JsonRpcProvider(url, undefined, {
+  const request = new FetchRequest(url);
+  request.timeout = 5000;
+  return new JsonRpcProvider(request, undefined, {
     polling: true,
     pollingInterval: 1000,
     cacheTimeout: -1,

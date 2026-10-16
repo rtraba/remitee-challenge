@@ -4,22 +4,19 @@ Updated: October 16, 2026 (America/Argentina/Cordoba).
 
 ## Current milestone
 
-Milestone 1 — toolchain baseline validated. All planning specifications 01–11 have been read, including the October 15 extensions and latest accepted decisions. No applicable AGENTS.md files were found in the working directory or ancestor directories.
+Milestone 6 — final documentation and clean-checkout delivery verification. Mandatory contract/indexer/API/runtime components are implemented. Agreed public remote: https://github.com/rtraba/remitee-challenge. Milestones 0–5 and opt-in Sepolia preparation have been committed and pushed. Final local validation and clean-checkout evidence are being completed; see the chronological results below.
 
-- Confirmed working directory: `/home/rodrigo/code/remitee`.
-- Both requested handoff documents are readable.
-- Initialized Git on `main` after filesystem approval; the sandbox exposes `.git` as read-only. No remote exists yet.
-- GitHub CLI authenticates successfully as `rtraba` with network access. The initial sandbox authentication check failed; the network-enabled check succeeded.
-- Rodrigo confirmed GitHub account `rtraba`. Repository name and public/private visibility remain pending; asked follow-up questions before remote creation or publication.
-- Prepared ignore rules and initial root README. Challenge PDF and runtime/private files are excluded.
+## Initial preflight record (historical)
 
-## Validation and commits
+Working directory and all specifications 01–11 were read before implementation, including October 15 extensions. No applicable AGENTS.md was found. Git initialization required filesystem approval because sandbox Git metadata is read-only. Network-enabled GitHub authentication worked as `rtraba`; Rodrigo selected repository `remitee-challenge`, public visibility. Baseline pushed before solution code. Supplied PDF/mail, credentials and runtime data excluded.
+
+## Initial validation and commits (historical)
 
 - Read-only inspection and tool-version checks completed.
 - Installed tools observed: Node 22.16.0, npm 10.9.2, Forge/Anvil 1.1.0-stable (`d484a00089d789a19e2e43e63bbb3f1500eb2cbf`). These are observations, not yet the selected/tested project toolchain.
 - Initial baseline commit: `49a5fe4` (`docs: record escrow design and execution plan`), containing only planning documents, ignore rules, initial README, and this status record. No push yet; repository name/visibility are pending. No build, tests, coverage, local startup, healthcheck, smoke, or demo have run.
 
-## Remaining milestones
+## Planned sequence (historical; results below)
 
 1. Agree remote identity/visibility; initialize, commit reviewed baseline, push and verify.
 2. Pin compatible tooling/dependencies and validate SQLite/build/test skeleton.
@@ -33,7 +30,7 @@ Commit and push each validated milestone, recording exact commands/results here.
 
 ## Open questions and constraints
 
-- Required user input: repository name and visibility. GitHub account confirmed as `rtraba`.
+- GitHub account/name/visibility resolved: `rtraba/remitee-challenge`, public. No required design input remains.
 - Private evaluator access requires identities and explicit instruction; do not invite/contact evaluators.
 - No revised submission deadline was provided; historical October 13/14 dates are not active deadlines.
 - No material behavioral deviations identified. Routine implementation choices will follow the specifications and be documented.
@@ -97,3 +94,14 @@ Runtime milestone `6d1e4bd` pushed. Added explicit Sepolia simulation/broadcast 
 - No Sepolia RPC simulation, signing, broadcast, real key use, explorer API test or submission has run. These paths are prepared and locally checked, not live validated.
 
 - Backend coverage after formatting/configuration changes: 24 tests passed; 99.13% lines (344/347), 98.68% statements (375/380), 98.38% functions (61/62), 95.23% branches (300/315). Remaining uncovered paths include the default application clock, malformed creation/unknown projector guard and a transient wrong-height branch; final review is ongoing. Thin CLI entry points are validated separately by integration/offline command tests, not included in backend percentage.
+
+## Final delivery verification in progress
+
+Preparation commit `0122706` pushed. Detailed root README is finalized from the draft narrative; docs/ai-usage.md records actual prompts/results, corrections and human decisions. Standalone deploy:local supports separately managed Anvil/API restart and refuses existing manifests. Additional regression tests explicitly cover malformed projection facts, unknown events, concurrent retrieval serialization, post-fetch committed boundary changes, resets below deployment, and long-catch-up RPC freshness.
+
+- Final backend coverage: 29 tests passed; lines 99.71% (355/356), statements 99.74% (388/389), functions 98.41% (62/63), branches 96.54% (307/318). One uncovered default clock closure; remaining branch combinations are visible in LCOV. Backend first-party indexer lines/statements/functions measured 100%.
+- Final contract coverage after formatting: 100% lines (59/59), statements (66/66), functions (18/18), branches (11/11), with source-map warnings disclosed. 10 Forge tests passed. Reports include dependency/script/fixture scopes separately. Reports now use separate coverage/api and coverage/contracts.lcov paths to avoid one tool deleting the other's outputs.
+- Integration rerun passed with real non-local chain 31338: smoke/deployment refused and block height remained 0. Evidence: `/tmp/remitee-integration-wo8f64`. Earlier repeated integration evidence: `/tmp/remitee-integration-NKVBST`.
+- Final review correction: test head truncation before deployment-header lookup so resets below deployment latch immediately; successful header/log RPC calls refresh RPC freshness during long catch-up, independently of meaningful worker progress. Deterministic regression tests passed.
+- Build passed. Clean remote clone/install/start/demo and README curl examples remain the last delivery check; no claim yet of a completed clean-checkout run.
+- No unresolved material design questions. No public simulation/deployment/verification/key testing, evaluator contact or solution submission occurred.

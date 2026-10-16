@@ -135,6 +135,32 @@ async function main() {
       publicGuard = true;
     }
     assert(publicGuard);
+    await stop(anvil);
+    const wrongChain = spawn('anvil', ['--port', '18545', '--chain-id', '31338', '--silent'], {
+      stdio: 'inherit',
+    });
+    children.push(wrongChain);
+    await until(
+      async () => {
+        try {
+          return await p.send('eth_chainId', []);
+        } catch {
+          return null;
+        }
+      },
+      (x) => x === '0x7a6a',
+    );
+    let chainGuard = false;
+    try {
+      command('scripts/smoke.ts');
+    } catch {
+      chainGuard = true;
+    }
+    assert(chainGuard);
+    process.env.MANIFEST_PATH = join(dir, 'wrong-chain.json');
+    await assert.rejects(deployLocal(), /LOCAL_ONLY/);
+    assert.equal(Number(await p.send('eth_blockNumber', [])), 0);
+
     console.log(
       `INTEGRATION PASS: deployment, empty readiness, health JSON/report/exit, smoke/demo, restart, real Anvil reset/reorg, backed-up rebuild and identity/local-only guards. Evidence directory: ${dir}`,
     );

@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, renameSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, renameSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { keccak256 } from 'ethers';
 import {
@@ -13,6 +13,7 @@ export const LOCAL_SENDER = '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266';
 export async function deployLocal() {
   const c = config();
   if (c.network !== 'local') throw Error('Local profile required');
+  if (existsSync(c.manifestPath)) throw Error('Existing manifest: select a fresh explicit path');
   const p = provider(c.rpcUrl);
   try {
     if (BigInt(await p.send('eth_chainId', [])) !== 31337n) throw Error('LOCAL_ONLY');

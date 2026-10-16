@@ -170,3 +170,13 @@ Rodrigo requested explicit deployment/listener specification, tests and coverage
 - Required named Forge deploy scripts and receipt/code/manifest checks; HTTP block polling and one Node.js process own the ingestion/listener and embedded SQLite writes.
 - Required read-only healthcheck terminal/JSON/optional report command, worker progress diagnostics, and separate state-changing LOCAL ONLY smoke proof.
 - Prepare Sepolia config and opt-in deploy/verify instructions/commands, no public broadcast or verification submission now. This extends earlier testnet exclusion for preparation only; Anvil remains delivered/default network.
+
+## Implementation choices (October 16, 2026)
+
+- Rodrigo explicitly selected GitHub account `rtraba`, repository `remitee-challenge`, **public** visibility. Baseline pushed before code; supplied PDF/mail/private/runtime files excluded.
+- Kept installed Foundry/Anvil 1.1.0 and pinned Solidity 0.8.30/Cancun/optimizer 200. OpenZeppelin 5.4.0, ethers 6.17.0, Fastify 5.12.7, better-sqlite3 12.4.1. Exact Node dependencies/lockfile and vendored forge-std v1.9.7 preserve reproducibility. npm optional-peer resolver workaround and versions are explained in docs/toolchain.md.
+- SQLite singleton deployment identity is validated JSON plus checkpoint columns, rather than separate draft identity columns. Same required identity values are checked; all four tables and atomic journal/projection/header/checkpoint semantics retained.
+- Simple exclusive file lock prevents application writer/rebuild overlap; stale locks require explicit operator verification/removal after abrupt kills. Graceful shutdown removes them. No automatic database takeover or reset.
+- Local manifests/runtime data are generated and ignored; standalone deploy command supports independent API restart with a separately managed node. New supervisor sessions require new explicit manifest/DB paths instead of deleting prior data.
+- Etherscan V2 verifier URL is explicit because pinned Foundry predates newer default endpoint behavior. Blockscout endpoint is explicitly operator-configured. Both flag sets were checked with offline standard compiler input; live public compatibility is not claimed. Public commands are opt-in, never invoked by install/build/test/local/health.
+- No accepted lifecycle/token/API behavior changes were required. No public deployment, verification submission, evaluator contact or submission authorized/performed.

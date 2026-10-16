@@ -61,6 +61,11 @@ export class Worker {
   }
   async catchUp() {
     const expected = this.repo.identity;
+    const head = await this.chain.head();
+    this.latestObservedBlock = head;
+    let checkpoint = this.repo.checkpoint();
+    if (checkpoint && head < checkpoint.number)
+      throw new IntegrityError('Committed history truncated');
     const actual = await this.chain.identity();
     for (const key of [
       'chainId',
@@ -70,15 +75,13 @@ export class Worker {
       'deploymentBlockHash',
     ] as const)
       if (actual[key] !== expected[key]) throw new IntegrityError('Deployment identity mismatch');
-    const head = await this.chain.head();
-    this.latestObservedBlock = head;
     this.lastSuccessfulRpcAt = this.clock();
-    let checkpoint = this.repo.checkpoint();
-    if (
-      checkpoint &&
-      (head < checkpoint.number ||
-        (await this.chain.header(checkpoint.number)).hash !== checkpoint.hash)
-    )
+    const observedHeader = async (number: number) => {
+      const result = await this.chain.header(number);
+      this.lastSuccessfulRpcAt = this.clock();
+      return result;
+    };
+    if (checkpoint && (await observedHeader(checkpoint.number)).hash !== checkpoint.hash)
       throw new IntegrityError('Committed history changed');
     const eligible = head - expected.confirmationDepth;
     for (
@@ -89,7 +92,7 @@ export class Worker {
       const to = Math.min(from + this.batchSize - 1, eligible),
         headers = [];
       for (let n = from; n <= to; n++) {
-        const h = await this.chain.header(n);
+        const h = await observedHeader(n);
         if (h.number !== n) throw new RangeChangedError('Wrong header height');
         headers.push(h);
         if (n > this.highestFetched) {
@@ -108,17 +111,18 @@ export class Worker {
           a.transactionIndex - b.transactionIndex ||
           a.logIndex - b.logIndex,
       );
+      this.lastSuccessfulRpcAt = this.clock();
       for (const log of events) {
         const h = headers[log.blockNumber - from];
         if (!h || h.hash !== log.blockHash) throw new RangeChangedError('Log range changed');
       }
       if (
-        (await this.chain.header(from)).hash !== headers[0].hash ||
-        (await this.chain.header(to)).hash !== headers.at(-1)!.hash
+        (await observedHeader(from)).hash !== headers[0].hash ||
+        (await observedHeader(to)).hash !== headers.at(-1)!.hash
       )
         throw new RangeChangedError('Uncommitted range changed');
       // Recheck the committed boundary immediately before writing.
-      if (checkpoint && (await this.chain.header(checkpoint.number)).hash !== checkpoint.hash)
+      if (checkpoint && (await observedHeader(checkpoint.number)).hash !== checkpoint.hash)
         throw new IntegrityError('Committed boundary changed');
       try {
         this.repo.commit(headers, events);

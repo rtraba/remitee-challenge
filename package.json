@@ -24,7 +24,8 @@
     "deploy:sepolia": "tsx scripts/sepolia.ts broadcast",
     "verify:sepolia:etherscan": "tsx scripts/sepolia.ts etherscan",
     "verify:sepolia:blockscout": "tsx scripts/sepolia.ts blockscout",
-    "format": "prettier --write \"api/**/*.ts\" \"scripts/**/*.ts\" vitest.config.ts"
+    "format": "prettier --write \"api/**/*.ts\" \"scripts/**/*.ts\" vitest.config.ts",
+    "deploy:local": "tsx scripts/deploy-local.ts"
   },
   "dependencies": {
     "@openzeppelin/contracts": "5.4.0",
