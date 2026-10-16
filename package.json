@@ -19,7 +19,12 @@
     "indexer:rebuild": "tsx scripts/rebuild.ts",
     "smoke": "tsx scripts/smoke.ts",
     "demo": "tsx scripts/demo.ts",
-    "test:integration": "tsx scripts/integration.ts"
+    "test:integration": "tsx scripts/integration.ts",
+    "deploy:sepolia:dry-run": "tsx scripts/sepolia.ts dry-run",
+    "deploy:sepolia": "tsx scripts/sepolia.ts broadcast",
+    "verify:sepolia:etherscan": "tsx scripts/sepolia.ts etherscan",
+    "verify:sepolia:blockscout": "tsx scripts/sepolia.ts blockscout",
+    "format": "prettier --write \"api/**/*.ts\" \"scripts/**/*.ts\" vitest.config.ts"
   },
   "dependencies": {
     "@openzeppelin/contracts": "5.4.0",
@@ -31,9 +36,10 @@
     "@types/better-sqlite3": "7.6.13",
     "@types/node": "22.15.30",
     "@vitest/coverage-v8": "4.1.11",
+    "prettier": "3.6.2",
     "tsx": "4.20.6",
     "typescript": "5.8.3",
-    "vitest": "4.1.11",
-    "vite": "6.4.4"
+    "vite": "6.4.4",
+    "vitest": "4.1.11"
   }
 }

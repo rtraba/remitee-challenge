@@ -86,3 +86,14 @@ API commit `eaac754` pushed. Added named production/local Forge scripts, receipt
 - `npm run test:contract`: 10 passed including deployment local-only guard. Backend coverage before final liveness refinement: 21 tests passed; 99.47% lines, 98.67% statements, 98.38% functions, 95.20% branches. Remeasure after remaining changes.
 - Worker progress was tightened to count new fetched heights/commits rather than repeatedly refreshing progress on the same failing range. Tests/review pending final validation.
 - Sepolia preparation, final README/AI record, clean-install delivery validation remain outstanding. No public deployment/verification/contact/submission occurred.
+
+## Sepolia preparation and readability
+
+Runtime milestone `6d1e4bd` pushed. Added explicit Sepolia simulation/broadcast commands, account/sender selection, RPC chain guards, receipt-derived separate manifest, API profile isolation, verification-only target/manifest checks, Etherscan V2 endpoint and configurable Blockscout endpoint. Keys are passed through child environment, not printed in commands. Verification results are written only when an operator actually runs the command.
+
+- `npm run test:api` with local subprocess permission: 24 tests passed, including both pinned Forge verifier flag sets using `--show-standard-json-input` only. Standard JSON asserted exact optimizer/Cancun/source settings. No broadcast or verification submission was made.
+- Public command construction tests cover signing/network/target/key/endpoint guards and exclusion of broadcast from dry-run/verification.
+- Added pinned Prettier 3.6.2; formatted first-party TypeScript and Forge scripts for review. `npm install` reports zero advisories.
+- No Sepolia RPC simulation, signing, broadcast, real key use, explorer API test or submission has run. These paths are prepared and locally checked, not live validated.
+
+- Backend coverage after formatting/configuration changes: 24 tests passed; 99.13% lines (344/347), 98.68% statements (375/380), 98.38% functions (61/62), 95.23% branches (300/315). Remaining uncovered paths include the default application clock, malformed creation/unknown projector guard and a transient wrong-height branch; final review is ongoing. Thin CLI entry points are validated separately by integration/offline command tests, not included in backend percentage.
