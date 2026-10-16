@@ -4,7 +4,7 @@ Updated: October 16, 2026 (America/Argentina/Cordoba).
 
 ## Current milestone
 
-Milestone 6 — delivery validation completed; final evidence push being recorded. Mandatory contract/indexer/API/runtime components are implemented. Agreed public remote: https://github.com/rtraba/remitee-challenge. Milestones 0–5 and opt-in Sepolia preparation have been committed and pushed. Final local validation and clean-checkout evidence are being completed; see the chronological results below.
+Completed — all mandatory milestones implemented, validated, committed and pushed. Mandatory contract/indexer/API/runtime components are implemented. Agreed public remote: https://github.com/rtraba/remitee-challenge. Milestones 0–5 and opt-in Sepolia preparation have been committed and pushed. Final local and clean-checkout evidence is recorded below.
 
 ## Initial preflight record (historical)
 
@@ -115,3 +115,11 @@ Preparation commit `0122706` pushed. Detailed root README is finalized from the 
 - Final contract test refinement records callback revert data and asserts exact `ReentrancyGuardReentrantCall()` selector on caught creation/payout callbacks. All 10 Forge tests passed; rerun contract coverage remained 100% for Escrow (59/59 lines, 66/66 statements, 18/18 functions, 11/11 branches). No application behavior changed after clean-clone validation.
 - Preserved workspace's generated initial local manifest/database under ignored `data/validation-session-20261016/`, leaving default paths free for Rodrigo's fresh startup. Temporary clean-checkout/integration evidence remains under /tmp; no user data was deleted.
 - No unresolved material design question or evaluator access blocker: agreed repository is public. No public RPC simulation, deployment, key test, explorer submission, evaluator contact or solution submission performed.
+
+## Completed handoff
+
+Final validation/assertion commit `199182a` pushed after implementation/docs commit `c071278`; the remaining handoff status update changes documentation only. All six implementation milestones plus initial repository setup and Sepolia preparation are complete. Working tree and origin/main synchronization are checked at handoff. Local validation processes were stopped; no Anvil process remained. Default workspace manifest/DB paths are free, with generated evidence preserved under ignored data/validation-session-20261016.
+
+Mandatory deliverables: contract/security tests, atomic event indexer, snapshot API, migration/schema checks, deployment scripts/manifests, supervisor/readiness/cleanup, read-only terminal/JSON/file diagnostics, local smoke/lifecycle demo, restart/reorg/rebuild integration, measured coverage, detailed README, AI usage record and opt-in Sepolia/explorer configuration. Public operations remain prepared but unexecuted. Optional fuzz/invariants/CI were deliberately deferred after mandatory completion; no unsupported claim is made.
+
+No unresolved design question. Material limitations remain documented: supported-token assumptions; periodic RPC-trusting reorg detection and explicit rebuild; live pagination; single embedded writer; source-map coverage limitations; public paths not live validated. Rodrigo controls any later submission/contact/public deployment/verification.
