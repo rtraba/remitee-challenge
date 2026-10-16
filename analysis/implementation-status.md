@@ -63,3 +63,12 @@ Contract commit `37507ef` pushed successfully. Indexer repository uses real SQLi
 - Real temporary database restart/schema/identity tests and deterministic fake-RPC cutoff/reorg/range/reset/fallback tests passed.
 - Implementation choice: singleton indexer_state stores deployment identity as JSON plus checkpoint columns rather than individual identity columns. Same deployment identity fields are strictly compared before resume; four-table projection design and transactional semantics retained. No contract storage queries populate projections.
 - Explicit backed-up rebuild and live Reader integration are scheduled for the orchestration milestone; not yet validated.
+
+## Milestone 4 validation
+
+Indexer commit `2259e6b` pushed. Added snapshot-consistent detail/list API, numeric descending decimal IDs and exclusive cursor, effective status SQL filters before pagination, strict query validation, safe error envelopes, independent RPC/worker/database health and initialization/integrity 503 behavior.
+
+- `npm run build` / strict TypeScript passed.
+- `npm run coverage:api`: 15 tests passed. First-party backend measured statements 98.38% (304/309), branches 95.13% (215/226), functions 98.14% (53/54), lines 99.39% (164/165). Reader ABI decoding/validation tested for all events, including malformed identity and missing code/header paths. Targets met in this run; later modules will require remeasurement.
+- API test groups cover all indexed-time boundaries, terminal override, very large uint256 values, 9/10 numeric ordering, filter combinations, malformed/repeated/empty/unknown parameters, no snapshot, schema mismatch, fresh RPC with stopped/stale worker, idle chain and sanitized internal failures.
+- Live deployment/diagnostic/runtime validation remains pending; no local startup or public operation claimed.
