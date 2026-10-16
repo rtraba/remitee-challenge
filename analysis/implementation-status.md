@@ -123,3 +123,15 @@ Final validation/assertion commit `199182a` pushed after implementation/docs com
 Mandatory deliverables: contract/security tests, atomic event indexer, snapshot API, migration/schema checks, deployment scripts/manifests, supervisor/readiness/cleanup, read-only terminal/JSON/file diagnostics, local smoke/lifecycle demo, restart/reorg/rebuild integration, measured coverage, detailed README, AI usage record and opt-in Sepolia/explorer configuration. Public operations remain prepared but unexecuted. Optional fuzz/invariants/CI were deliberately deferred after mandatory completion; no unsupported claim is made.
 
 No unresolved design question. Material limitations remain documented: supported-token assumptions; periodic RPC-trusting reorg detection and explicit rebuild; live pagination; single embedded writer; source-map coverage limitations; public paths not live validated. Rodrigo controls any later submission/contact/public deployment/verification.
+
+## Documentation refinement and review (October 16, 2026)
+
+Rodrigo authorized the proposed order after review against the original PDF: shorten README, preserve reference details, add actual AI output excerpts, then conduct a human technical walkthrough. Docker remains optional and is not part of this implementation pass.
+
+- Root README reduced from roughly 4,400 words to approximately 760, retaining installation/start/demo/test commands, three endpoint examples, scoped measured coverage, a short lifecycle/design/assumption summary and future improvements.
+- Detailed design and rationale moved to docs/design.md; configuration, diagnostics, API semantics, restart/rebuild and validation evidence moved to docs/operations.md; optional public instructions moved to docs/sepolia.md. Exact versions remain in docs/toolchain.md, whose stale pre-validation wording was corrected. The full original README is preserved in Git at b1d0625.
+- docs/ai-usage.md now contains three selected verbatim user-prompt/assistant-output examples from the actual conversation, separately labeled from retrospective summaries. No transcript or output was invented.
+- Application code, dependencies, scripts, lifecycle behavior and prior test/coverage measurements are unchanged. This is a documentation-only change; no new application test result is claimed.
+- Documentation verification passed: 31 local links/heading anchors across six Markdown files, 18 npm command names matched package.json, all 19 original source sections accounted for, git diff --check clean, README 762 words. The original source exactly matched b1d0625:README.md. Existing validated commands are retained, without executing public paths.
+- Human review is the remaining interactive step: payout safety, exact deadlines, duplicate processing, restart recovery and reorg handling. Do not mark it completed or infer interview readiness from automated tests. The first question will be presented after the documentation handoff.
+- No Docker implementation, public deployment/verification, evaluator contact or submission performed.

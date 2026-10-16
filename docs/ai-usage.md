@@ -27,8 +27,59 @@ Account/name/visibility were unresolved. Rodrigo answered `rtraba`, then selecte
 - Snapshot-based HTTP detail/list/health, numeric uint256 cursors, pre-pagination effective-status SQL, strict validation and independent operational liveness. Initial backend coverage was below target because reader tests were missing; added generated-ABI reader validation/decoding tests, then remeasured. API commit `eaac754`.
 - Named deployment scripts, receipt/code/build manifest checks, supervisor, healthcheck, smoke/demo and isolated integration. First live deployment succeeded but wrapper looked for the wrong broadcast filename; corrected to Forge's `deployLocal-latest.json`, verified failed-run cleanup, and reran successfully. Empty deployment readiness, all payouts, Pending expiry, restart, real Anvil snapshot/revert, integrity 503 and backed-up canonical rebuild were observed. Runtime commit `6d1e4bd`.
 - Sepolia account/profile/signing guards and separate simulation/broadcast/verification commands. Current official Foundry/Etherscan/Blockscout references were checked. Both verifier argument sets produced standard JSON compiler input through the pinned Forge CLI locally; no public simulation, deployment, verification submission or API-key test ran. Preparation commit `0122706`.
-- Detailed README finalized from the planning narrative, covering actual runtime ownership, tested commands, token/reorg/time/pagination assumptions, operational caveats and prepared public paths. Final test/coverage and clean-checkout evidence is maintained in the status record and README.
+- Detailed README finalized from the planning narrative, covering actual runtime ownership, tested commands, token/reorg/time/pagination assumptions, operational caveats and prepared public paths. Final test/coverage and clean-checkout evidence is maintained in the status record and [operations reference](operations.md#commands-and-actual-verification); the README carries a concise summary.
+
+## Verbatim prompt/output excerpts
+
+These excerpts are copied from the actual conversation. They are selected passages, not a reconstructed transcript. The milestone summaries above describe outcomes; the blockquotes below preserve actual assistant wording. Status and percentages in those outputs describe their original point in the conversation.
+
+### 1. Confirm the workspace before changing files
+
+**User prompt:**
+
+> Before changing files, confirm that your working directory is `/home/rodrigo/code/remitee` and that you can read `analysis/08-execution-plan.md` and `analysis/11-runtime-deployment-health.md`
+
+**Assistant output:**
+
+> Confirmed: my working directory is `/home/rodrigo/code/remitee`, and both files are readable:
+>
+> - `analysis/08-execution-plan.md`
+> - `analysis/11-runtime-deployment-health.md`
+>
+> No files have been changed.
+
+### 2. Implement and validate the challenge
+
+**User prompt excerpt** (the full execution request appears above):
+
+> Implement the Remitee challenge in /home/rodrigo/code/remitee following analysis/08-execution-plan.md and every referenced specification, including analysis/11-runtime-deployment-health.md.
+
+**Assistant output excerpt from the completed implementation handoff:**
+
+> Implemented and pushed to [rtraba/remitee-challenge](https://github.com/rtraba/remitee-challenge). Working tree is clean; `main` matches `origin/main` at `b1d0625`.
+>
+> - All mandatory contract, indexer, API, deployment, diagnostics, smoke/demo, and lifecycle deliverables completed.
+> - **10 Forge tests and 29 backend tests pass.**
+> - Fresh-clone install, build, startup, healthcheck, smoke/demo, and all seven README curl examples passed.
+> - Contract coverage: **100%** across measured metrics.
+> - Backend coverage: **99.71% lines, 99.74% statements, 98.41% functions, 96.54% branches**.
+
+**Further excerpt from the same output:**
+
+> The flow is contract events → atomic SQLite journal/projection → snapshot-consistent API. Token assumptions, reorg/rebuild policy, and coverage limitations are documented.
+
+### 3. Reassess delivery against the original PDF
+
+**User prompt excerpt:**
+
+> we are planiing the best next step yet, do not implemente changes, just suggest what can or should we do next, and at we % we can say that we al ready to comunicate that delivery is ready and done.
+
+**Assistant output excerpt:**
+
+> **Docker, public testnet deployment, explorer verification, CI, fuzzing and invariant testing are not mandatory.** The PDF gives an ordinary startup command as an alternative to Compose and explicitly labels testnet deployment and the listed extras optional. Missing Docker therefore should not reduce our completion percentage.
+
+The user then authorized the proposed order: shorten README, preserve reference details, strengthen this record, and conduct a human technical walkthrough. Docker remains a proposed optional improvement, not an implemented feature. The subjective readiness estimate from that discussion is not a test result, security guarantee, or predicted evaluator score.
 
 ## Scope of AI involvement
 
-The agent generated and revised implementation, tests, scripts and documentation, operated local validation tools, and committed/pushed milestones after user authorization. Human review remains necessary; measured coverage is not a security audit. No subagent work, evaluator messaging, invitations or submission was performed. Public deployment/verification is intentionally not claimed. This record summarizes real outputs without presenting generated code as human-authored work.
+The agent generated and revised implementation, tests, scripts and documentation, operated local validation tools, and committed/pushed milestones after user authorization. Human review remains necessary; measured coverage is not a security audit. No subagent work, evaluator messaging, invitations or submission was performed. Public deployment/verification is intentionally not claimed. This record includes selected verbatim excerpts and retrospective summaries without presenting generated code as human-authored work.
