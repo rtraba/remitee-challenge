@@ -54,3 +54,12 @@ Tooling commit `2465687` pushed. Implemented immutable per-escrow authorization,
 - `npm run coverage:contract`: first-party `src/Escrow.sol` 100% lines (54/54), statements (66/66), branches (11/11), functions (18/18). Raw report includes dependencies/fixtures separately. Foundry emitted source-map anchor warnings (including modifier locations); measured percentages do not establish exhaustive correctness. No dependency logic changed. Foundry's signature-cache write warning is environmental and does not fail tests.
 - Manual call-path review: all five mutating entry points guarded; existence/actor/state/time order explicit; creation stores only after exact receipt; resolutions write state before transfer and emit after success; no admin escape path.
 - Coverage disables optimization; production build must run again before manifest identity generation.
+
+## Milestone 3 validation
+
+Contract commit `37507ef` pushed successfully. Indexer repository uses real SQLite migrations (user_version=1), foreign keys, ordered transactional journal/projection/header/checkpoint writes, exact duplicate conflict comparison, explicit decimal/address validation. Serialized worker uses initial catch-up, HTTP block listener, 2-second fallback, bounded batches, empty headers, checkpoint/deployment verification, range boundary rechecks, independent liveness fields and latched integrity errors.
+
+- `npm run test:api`: 9 tests passed (including 7 database/indexer scenario groups); `npx tsc --noEmit` passed.
+- Real temporary database restart/schema/identity tests and deterministic fake-RPC cutoff/reorg/range/reset/fallback tests passed.
+- Implementation choice: singleton indexer_state stores deployment identity as JSON plus checkpoint columns rather than individual identity columns. Same deployment identity fields are strictly compared before resume; four-table projection design and transactional semantics retained. No contract storage queries populate projections.
+- Explicit backed-up rebuild and live Reader integration are scheduled for the orchestration milestone; not yet validated.
