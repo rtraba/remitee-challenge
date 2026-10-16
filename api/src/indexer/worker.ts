@@ -5,7 +5,7 @@ export class Worker {
  listenerRegistered=false; fallbackTimerActive=false;
  lastCycleCompletedAt:number|null=null; activeBatchStartedAt:number|null=null; lastProgressAt:number|null=null;
  lastSuccessfulRpcAt:number|null=null; latestObservedBlock:number|null=null; integrityError:string|null=null;
- private timer:ReturnType<typeof setInterval>|undefined; private active:Promise<void>|undefined; private pending=false; private stopping=false;
+ private timer:ReturnType<typeof setInterval>|undefined; private active:Promise<void>|undefined; private pending=false; private stopping=false; private highestFetched=-1;
  private readonly trigger=()=>{void this.request();};
  constructor(readonly repo:Repository,readonly chain:Chain,readonly clock=()=>Date.now()/1000,readonly batchSize=100){}
  async start(){
@@ -37,7 +37,7 @@ export class Worker {
   const eligible=head-expected.confirmationDepth;
   for(let from=checkpoint?checkpoint.number+1:expected.deploymentBlock;from<=eligible;){
    const to=Math.min(from+this.batchSize-1,eligible),headers=[];
-   for(let n=from;n<=to;n++){const h=await this.chain.header(n);if(h.number!==n)throw new RangeChangedError('Wrong header height');headers.push(h);this.lastProgressAt=this.clock();}
+   for(let n=from;n<=to;n++){const h=await this.chain.header(n);if(h.number!==n)throw new RangeChangedError('Wrong header height');headers.push(h);if(n>this.highestFetched){this.highestFetched=n;this.lastProgressAt=this.clock();}}
    for(let i=0;i<headers.length;i++){
     const previous=i?headers[i-1]:checkpoint;
     if(previous && headers[i].parentHash!==previous.hash)throw new RangeChangedError('Range parent changed');

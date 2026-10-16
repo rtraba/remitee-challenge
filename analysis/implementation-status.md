@@ -72,3 +72,17 @@ Indexer commit `2259e6b` pushed. Added snapshot-consistent detail/list API, nume
 - `npm run coverage:api`: 15 tests passed. First-party backend measured statements 98.38% (304/309), branches 95.13% (215/226), functions 98.14% (53/54), lines 99.39% (164/165). Reader ABI decoding/validation tested for all events, including malformed identity and missing code/header paths. Targets met in this run; later modules will require remeasurement.
 - API test groups cover all indexed-time boundaries, terminal override, very large uint256 values, 9/10 numeric ordering, filter combinations, malformed/repeated/empty/unknown parameters, no snapshot, schema mismatch, fresh RPC with stopped/stale worker, idle chain and sanitized internal failures.
 - Live deployment/diagnostic/runtime validation remains pending; no local startup or public operation claimed.
+
+## Milestone 5 validation
+
+API commit `eaac754` pushed. Added named production/local Forge scripts, receipt-derived manifest and runtime/ABI identity, local supervisor, signer-free API startup, exclusive writer lock, explicit backed-up rebuild, read-only diagnostics (table/JSON/report/exit), local smoke and full lifecycle clients, and isolated Anvil integration.
+
+- `npm run local`: live Anvil + deployment + API reached full readiness. First run exposed Forge's custom-signature broadcast filename (`deployLocal-latest.json`); wrapper fixed, failed supervisor cleaned up Anvil, next run passed.
+- `npm run healthcheck -- --json --report /tmp/remitee-health-first.json`: PASS with zero events/escrows after deployment, checkpoint block 2.
+- `npm run smoke`: PASS, both creation/cancellation matched receipts, block hashes, journal, projection/API and payouts.
+- `npm run demo`: PASS, cancellation/release/rejection/recovery on separate escrows; Pending expiry observed before recovery, terminal balances/hashes checked.
+- `npm run test:integration`: PASS. Fresh deployment; empty readiness; terminal and JSON/file health diagnostics; smoke/demo (5 escrows/10 events); API restart without duplication; real Anvil snapshot/revert caused integrity 503; stopped writer and preserved backup then rebuilt canonical data; mismatched deployment and non-local smoke rejected. Evidence: `/tmp/remitee-integration-cJsLoY` (untracked).
+- Additional deterministic diagnostics tests cover stopped/stale worker despite RPC freshness, schema/identity/hash/integrity failures, timeout target, sanitized failures, JSON/report and exit results. Journal/projection spot check now comes from one DB snapshot in the owning API.
+- `npm run test:contract`: 10 passed including deployment local-only guard. Backend coverage before final liveness refinement: 21 tests passed; 99.47% lines, 98.67% statements, 98.38% functions, 95.20% branches. Remeasure after remaining changes.
+- Worker progress was tightened to count new fetched heights/commits rather than repeatedly refreshing progress on the same failing range. Tests/review pending final validation.
+- Sepolia preparation, final README/AI record, clean-install delivery validation remain outstanding. No public deployment/verification/contact/submission occurred.

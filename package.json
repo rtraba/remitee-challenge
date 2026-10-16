@@ -12,7 +12,14 @@
     "test:api": "vitest run",
     "test": "npm run test:contract && npm run test:api",
     "coverage:contract": "mkdir -p coverage && forge coverage --root contracts --report summary --report lcov --report-file ../coverage/contracts.lcov",
-    "coverage:api": "vitest run --coverage"
+    "coverage:api": "vitest run --coverage",
+    "local": "tsx scripts/local.ts",
+    "api:start": "tsx api/src/main.ts",
+    "healthcheck": "tsx scripts/healthcheck-cli.ts",
+    "indexer:rebuild": "tsx scripts/rebuild.ts",
+    "smoke": "tsx scripts/smoke.ts",
+    "demo": "tsx scripts/demo.ts",
+    "test:integration": "tsx scripts/integration.ts"
   },
   "dependencies": {
     "@openzeppelin/contracts": "5.4.0",

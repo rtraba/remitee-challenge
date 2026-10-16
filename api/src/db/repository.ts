@@ -58,7 +58,7 @@ export class Repository {
   return this.db.prepare(`SELECT ${columns} FROM escrows ${where.length?'WHERE '+where.join(' AND '):''} ORDER BY length(id) DESC,id DESC LIMIT ?`).all(...args,filters.limit+1) as EscrowRow[];
  }
  diagnostics(){
-  return this.snapshot(()=>({schemaVersion:this.db.pragma('user_version',{simple:true}),journalEventCount:(this.db.prepare('SELECT count(*) AS n FROM escrow_events').get() as {n:number}).n,escrowCount:(this.db.prepare('SELECT count(*) AS n FROM escrows').get() as {n:number}).n,lastJournalEvent:this.db.prepare('SELECT block_hash AS blockHash,block_number AS blockNumber,log_index AS logIndex,transaction_hash AS transactionHash,escrow_id AS id,event_name AS name FROM escrow_events ORDER BY block_number DESC,transaction_index DESC,log_index DESC LIMIT 1').get()??null}));
+  return this.snapshot(()=>({schemaVersion:this.db.pragma('user_version',{simple:true}),journalEventCount:(this.db.prepare('SELECT count(*) AS n FROM escrow_events').get() as {n:number}).n,escrowCount:(this.db.prepare('SELECT count(*) AS n FROM escrows').get() as {n:number}).n,lastJournalEvent:this.db.prepare('SELECT block_hash AS blockHash,block_number AS blockNumber,log_index AS logIndex,transaction_hash AS transactionHash,escrow_id AS id,event_name AS name,(SELECT creation_transaction_hash FROM escrows WHERE id=escrow_id) AS creationTransactionHash,(SELECT resolution_transaction_hash FROM escrows WHERE id=escrow_id) AS resolutionTransactionHash FROM escrow_events ORDER BY block_number DESC,transaction_index DESC,log_index DESC LIMIT 1').get()??null}));
  }
  close(){this.db.close();}
 }
