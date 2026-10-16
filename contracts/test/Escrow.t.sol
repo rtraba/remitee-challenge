@@ -282,6 +282,7 @@ contract EscrowTest is Test {
             vm.prank(alice);
             uint256 id = e.createEscrow(address(h), bob, 100);
             assertFalse(h.callbackSucceeded());
+            assertEq(h.callbackResult(), abi.encodeWithSignature("ReentrancyGuardReentrantCall()"));
             if (a % 4 == 3) vm.warp(605800);
             h.configure(HostileToken.Mode.CallbackPropagated, address(e), calls[a]);
             vm.expectRevert(bytes("CALLBACK_FAILED"));
@@ -293,6 +294,7 @@ contract EscrowTest is Test {
             vm.prank(actor(a % 4));
             act(a % 4, id);
             assertFalse(h.callbackSucceeded());
+            assertEq(h.callbackResult(), abi.encodeWithSignature("ReentrancyGuardReentrantCall()"));
         }
     }
 }

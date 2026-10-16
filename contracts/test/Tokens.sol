@@ -26,6 +26,7 @@ contract HostileToken is TestToken {
     address public target;
     bytes public callData;
     bool public callbackSucceeded;
+    bytes public callbackResult;
 
     function configure(Mode m, address t, bytes memory d) external {
         mode = m;
@@ -37,7 +38,8 @@ contract HostileToken is TestToken {
         if (mode == Mode.FalseReturn) return false;
         require(mode != Mode.Revert, "TOKEN_REVERT");
         if (mode == Mode.CallbackCaught || mode == Mode.CallbackPropagated) {
-            (bool ok,) = target.call(callData);
+            (bool ok, bytes memory result) = target.call(callData);
+            callbackResult = result;
             callbackSucceeded = ok;
             if (mode == Mode.CallbackPropagated) require(ok, "CALLBACK_FAILED");
         }

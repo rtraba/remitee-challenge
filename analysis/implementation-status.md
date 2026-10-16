@@ -4,7 +4,7 @@ Updated: October 16, 2026 (America/Argentina/Cordoba).
 
 ## Current milestone
 
-Milestone 6 — final documentation and clean-checkout delivery verification. Mandatory contract/indexer/API/runtime components are implemented. Agreed public remote: https://github.com/rtraba/remitee-challenge. Milestones 0–5 and opt-in Sepolia preparation have been committed and pushed. Final local validation and clean-checkout evidence are being completed; see the chronological results below.
+Milestone 6 — delivery validation completed; final evidence push being recorded. Mandatory contract/indexer/API/runtime components are implemented. Agreed public remote: https://github.com/rtraba/remitee-challenge. Milestones 0–5 and opt-in Sepolia preparation have been committed and pushed. Final local validation and clean-checkout evidence are being completed; see the chronological results below.
 
 ## Initial preflight record (historical)
 
@@ -105,3 +105,13 @@ Preparation commit `0122706` pushed. Detailed root README is finalized from the 
 - Final review correction: test head truncation before deployment-header lookup so resets below deployment latch immediately; successful header/log RPC calls refresh RPC freshness during long catch-up, independently of meaningful worker progress. Deterministic regression tests passed.
 - Build passed. Clean remote clone/install/start/demo and README curl examples remain the last delivery check; no claim yet of a completed clean-checkout run.
 - No unresolved material design questions. No public simulation/deployment/verification/key testing, evaluator contact or solution submission occurred.
+
+## Clean-checkout delivery evidence
+
+- Final implementation/docs commit `c071278` pushed and publicly cloned to `/tmp/remitee-clean-delivery-20261016` from GitHub. `gh repo view` confirmed PUBLIC visibility and default branch main.
+- In that clean clone: `npm ci` passed (163 packages added, zero reported advisories); `npm run build` compiled 39 Solidity files and passed strict TypeScript; `npm test` passed all 10 Forge tests and 29 backend tests.
+- Clean-clone `npm run local` reached full readiness. Read-only `healthcheck -- --json --report /tmp/remitee-clean-health.json` passed at fresh empty checkpoint block 2.
+- Clean-clone smoke/demo passed. Subsequent terminal healthcheck passed with 10 journal events, 5 escrows and lag 0. All seven README curl examples returned asserted expected responses, including detail, filters and numeric cursor ordering. JSON response evidence: `/tmp/remitee-clean-curl-*.json`.
+- Final contract test refinement records callback revert data and asserts exact `ReentrancyGuardReentrantCall()` selector on caught creation/payout callbacks. All 10 Forge tests passed; rerun contract coverage remained 100% for Escrow (59/59 lines, 66/66 statements, 18/18 functions, 11/11 branches). No application behavior changed after clean-clone validation.
+- Preserved workspace's generated initial local manifest/database under ignored `data/validation-session-20261016/`, leaving default paths free for Rodrigo's fresh startup. Temporary clean-checkout/integration evidence remains under /tmp; no user data was deleted.
+- No unresolved material design question or evaluator access blocker: agreed repository is public. No public RPC simulation, deployment, key test, explorer submission, evaluator contact or solution submission performed.

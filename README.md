@@ -62,6 +62,8 @@ Local fixtures use the publicly known Anvil development mnemonic and accounts 0/
 
 Integration uses dedicated ports 18545 and 13000, checks availability before starting, stores temporary manifests/DB/backups/reports under `/tmp/remitee-integration-*`, and cleans up only its own processes. Do not run two integrations concurrently. Its real snapshot/revert case asserts integrity failure and HTTP 503, then rebuilds while preserving the old database. API restart retains exactly 5 escrows/10 events after smoke plus demo. Negative tests intentionally produce failure messages while the overall test still passes.
 
+A fresh remote clone at `c071278` passed `npm ci` (zero reported advisories), build, both suites, full `npm run local` readiness, healthcheck terminal/JSON/report, smoke, lifecycle demo and all seven curl examples with asserted responses. Subsequent changes only strengthen test assertions and document this evidence; application behavior is unchanged.
+
 Measured on October 16, 2026: **10 Forge tests** and **29 backend tests** passed (scenario groups contain explicit boundary/action matrices). Build and live isolated integration passed. First-party coverage:
 
 | Scope | Lines | Statements | Functions | Branches |
