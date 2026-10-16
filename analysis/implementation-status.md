@@ -4,7 +4,7 @@ Updated: October 16, 2026 (America/Argentina/Cordoba).
 
 ## Current milestone
 
-Milestone 0 — repository setup. All planning specifications 01–11 have been read, including the October 15 extensions and latest accepted decisions. No applicable AGENTS.md files were found in the working directory or ancestor directories.
+Milestone 1 — toolchain baseline validated. All planning specifications 01–11 have been read, including the October 15 extensions and latest accepted decisions. No applicable AGENTS.md files were found in the working directory or ancestor directories.
 
 - Confirmed working directory: `/home/rodrigo/code/remitee`.
 - Both requested handoff documents are readable.
@@ -17,7 +17,7 @@ Milestone 0 — repository setup. All planning specifications 01–11 have been 
 
 - Read-only inspection and tool-version checks completed.
 - Installed tools observed: Node 22.16.0, npm 10.9.2, Forge/Anvil 1.1.0-stable (`d484a00089d789a19e2e43e63bbb3f1500eb2cbf`). These are observations, not yet the selected/tested project toolchain.
-- No commits or pushes yet. No build, tests, coverage, local startup, healthcheck, smoke, or demo have run.
+- Initial baseline commit: `49a5fe4` (`docs: record escrow design and execution plan`), containing only planning documents, ignore rules, initial README, and this status record. No push yet; repository name/visibility are pending. No build, tests, coverage, local startup, healthcheck, smoke, or demo have run.
 
 ## Remaining milestones
 
@@ -38,3 +38,10 @@ Commit and push each validated milestone, recording exact commands/results here.
 - No revised submission deadline was provided; historical October 13/14 dates are not active deadlines.
 - No material behavioral deviations identified. Routine implementation choices will follow the specifications and be documented.
 - Do not deploy publicly, submit explorer verification, or submit the solution without subsequent explicit authorization.
+
+## Milestones 0/1 results
+
+- Agreed public remote: https://github.com/rtraba/remitee-challenge. Baseline `49a5fe4` pushed successfully; origin/main tracks main. Account/name/visibility resolved by Rodrigo.
+- `npm install` completed with zero reported advisories after pinning Vitest/coverage 4.1.11 and Vite 6.4.4. `.npmrc` records peer-resolution workaround for npm 10.9.2 crash; see docs/toolchain.md. Native better-sqlite3 loaded successfully.
+- `npm run build`: Forge Solidity 0.8.30 and strict TypeScript passed. `npm test`: toolchain Forge test and backend validation/native-SQLite/Fastify tests passed. No application behavior or coverage claims yet.
+- Pinned Foundry configuration and vendored forge-std v1.9.7; ethers 6.17.0, Fastify 5.12.7, OpenZeppelin 5.4.0, SQLite driver 12.4.1.

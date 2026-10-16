@@ -1,0 +1,32 @@
+{
+  "name": "remitee-challenge",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.16.0 <23"
+  },
+  "scripts": {
+    "build": "forge build --root contracts && tsc --noEmit",
+    "test:contract": "forge test --root contracts",
+    "test:api": "vitest run",
+    "test": "npm run test:contract && npm run test:api",
+    "coverage:contract": "mkdir -p coverage && forge coverage --root contracts --report summary --report lcov --report-file ../coverage/contracts.lcov",
+    "coverage:api": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "5.4.0",
+    "better-sqlite3": "12.4.1",
+    "ethers": "6.17.0",
+    "fastify": "5.12.7"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "7.6.13",
+    "@types/node": "22.15.30",
+    "@vitest/coverage-v8": "4.1.11",
+    "tsx": "4.20.6",
+    "typescript": "5.8.3",
+    "vitest": "4.1.11",
+    "vite": "6.4.4"
+  }
+}
